@@ -274,11 +274,12 @@ class TranslateXApp(tk.Tk):
 
         self.api_var = tk.StringVar(value="google")
         apis = [
-            ("google",    "Google 翻譯",    "免費"),
-            ("deepl",     "DeepL",          "付費"),
-            ("microsoft", "Microsoft Azure","付費"),
-            ("openai",    "OpenAI GPT",     "付費"),
-            ("custom",    "自訂 API",       "客製"),
+            ("google",     "Google 翻譯",       "免費"),
+            ("deepl",      "DeepL",             "付費"),
+            ("microsoft",  "Microsoft Azure",   "付費"),
+            ("openai",     "OpenAI GPT",        "付費"),
+            ("cloudflare", "Cloudflare AI",     "付費"),
+            ("custom",     "自訂 API",          "客製"),
         ]
         for val, label, badge in apis:
             self._api_radio(side, val, label, badge)
@@ -540,6 +541,46 @@ class TranslateXApp(tk.Tk):
                                           values=["gpt-4o-mini", "gpt-4o", "gpt-3.5-turbo"])
         self.openai_model.set("gpt-4o-mini")
         self.openai_model.pack(side="left", fill="x", expand=True)
+
+        # Cloudflare Workers AI
+        card_cf = self._card(parent, "☁  Cloudflare Workers AI")
+        card_cf.pack(fill="x", pady=(0, 10))
+        self._api_key_row(card_cf, "Account ID",  "cf_account_id",  secret=False)
+        self._api_key_row(card_cf, "API Token",   "cf_api_token",   secret=True)
+
+        frame_cf = tk.Frame(card_cf, bg=COLORS["bg_card"])
+        frame_cf.pack(fill="x", padx=12, pady=(0, 4))
+        tk.Label(frame_cf, text="翻譯模型", bg=COLORS["bg_card"],
+                 fg=COLORS["text_secondary"], font=FONTS["small"],
+                 width=14, anchor="w").pack(side="left")
+        self.cf_model = ttk.Combobox(
+            frame_cf, font=FONTS["body"],
+            values=["@cf/meta/m2m100-1.2b", "@cf/facebook/nllb-200-distilled-600M"])
+        self.cf_model.set("@cf/meta/m2m100-1.2b")
+        self.cf_model.pack(side="left", fill="x", expand=True)
+
+        frame_gw = tk.Frame(card_cf, bg=COLORS["bg_card"])
+        frame_gw.pack(fill="x", padx=12, pady=(4, 4))
+        tk.Label(frame_gw, text="AI Gateway ID\n(可留空)", bg=COLORS["bg_card"],
+                 fg=COLORS["text_secondary"], font=FONTS["small"],
+                 width=14, anchor="w", justify="left").pack(side="left")
+        gw_entry = tk.Entry(frame_gw, bg=COLORS["bg_dark"],
+                            fg=COLORS["text_primary"],
+                            insertbackground=COLORS["accent"],
+                            relief="flat", font=FONTS["body"])
+        gw_entry.pack(side="left", fill="x", expand=True, ipady=4, padx=(0, 4))
+        if not hasattr(self, '_setting_entries'):
+            self._setting_entries = {}
+        self._setting_entries["cf_gateway_id"] = gw_entry
+        saved_gw = self.config_mgr.get("cf_gateway_id", "")
+        if saved_gw:
+            gw_entry.insert(0, saved_gw)
+
+        tk.Label(card_cf,
+                 text="• m2m100-1.2b：100 種語言直接互譯，無需中間語言\n"
+                      "• 填入 AI Gateway ID 可透過 Cloudflare 閘道統一管理流量",
+                 bg=COLORS["bg_card"], fg=COLORS["text_dim"],
+                 font=FONTS["small"], justify="left").pack(anchor="w", padx=12, pady=(0, 8))
 
         # 自訂 API
         card4 = self._card(parent, "自訂翻譯 API")
@@ -880,6 +921,9 @@ class TranslateXApp(tk.Tk):
     def _save_settings(self):
         for key, entry in self._setting_entries.items():
             self.config_mgr.set(key, entry.get())
+        # 儲存 Combobox 選項
+        self.config_mgr.set("openai_model", self.openai_model.get())
+        self.config_mgr.set("cf_model",     self.cf_model.get())
         self.config_mgr.save()
         self.engine.reload_config(self.config_mgr)
         messagebox.showinfo("設定", "設定已儲存。")
