@@ -1,0 +1,13 @@
+# TranslateX 相依套件
+# 執行：pip install -r requirements.txt
+
+# 必要（標準庫已內建，無需安裝）
+# tkinter     — GUI（Python 內建）
+# csv         — CSV 處理（Python 內建）
+# json        — JSON 處理（Python 內建）
+# urllib      — HTTP 請求（Python 內建）
+# threading   — 多執行緒（Python 內建）
+
+# 選用（根據功能需求）
+openpyxl>=3.1.0      # Excel (.xlsx) 讀寫支援
+pandas>=2.0.0        # 進階資料分析（可選）

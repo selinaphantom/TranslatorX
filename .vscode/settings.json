@@ -1,0 +1,12 @@
+{
+  "python.defaultInterpreterPath": "python",
+  "editor.fontSize": 13,
+  "editor.tabSize": 4,
+  "files.encoding": "utf8",
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "python.analysis.typeCheckingMode": "basic",
+  "workbench.colorTheme": "One Dark Pro"
+}
