@@ -145,7 +145,3 @@ translator_app/
 - `~/.translatex/config.json`（Windows：`C:\Users\你的名字\.translatex\config.json`）
 
 ---
-
-## 📝 授權
-
-MIT License — 自由使用、修改、商用。
