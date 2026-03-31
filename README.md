@@ -1,6 +1,6 @@
-# TranslateX — 多功能翻譯工具
+# TranslateX — 翻譯工具
 
-一款支援多種翻譯 API、可處理 CSV / Excel / TXT 檔案的桌面翻譯工具，介面完全繁體中文化。
+支援多種翻譯 API、可處理 CSV / Excel / TXT 檔案的桌面翻譯工具，介面完全繁體中文化。
 
 ---
 
